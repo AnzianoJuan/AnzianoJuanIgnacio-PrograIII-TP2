@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/index.css" />
+    <title>Quant-Analyzer</title>
+  </head>
+  <body>
+    <header>
+      <div class="contenedor-header">
+        <div class="contenedor-logo">
+          <img
+            class="imagen-logo"
+            src="./src/assets/logo.svg"
+            alt="Logo Quant Analyzer"
+          />
+          <span class="logo-nombre">Quant Analyzer</span>
+        </div>
+        <nav>
+          <ul class="nav-ul">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#mercado">Mercado</a></li>
+            <li><a href="#buscador">Buscador</a></li>
+            <li><a href="#tendencias">Tendencias</a></li>
+          </ul>
+        </nav>
+        <a href="#buscador" class="btn-primario">Buscar cripto</a>
+      </div>
+    </header>
+    <main>
+      <section id="inicio" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-contenido">
+          <h1 class="hero-titulo">
+            Analizá el mercado cripto <span>en tiempo real</span>
+          </h1>
+          <p class="hero-descripcion">
+            Buscá cualquier criptomoneda, seguí su precio actual, variación del
+            día 
+          </p>
+          <a href="#buscador" class="btn-primario">Empezar ahora</a>
+        </div>
+      </section>
+      <section id="mercado" class="mercado">
+        <div class="contenedor-mercado">
+          <div class="mercado-header">
+            <h2 class="mercado-titulo">Mercado</h2>
+            <p class="mercado-descripcion">Las 10 criptomonedas con mayor market cap del momento</p>
+          </div>
+          <div class="mercado-grid" id="mercado-grid">
+            <!-- estas las genere yo con javascrpt -->
+          </div>
+        </div>
+      </section>
+      <section id="buscador" class="buscador">
+        <div class="contenedor-buscador">
+          <div class="buscador-header">
+            <h2 class="buscador-titulo">Buscador</h2>
+            <p class="buscador-descripcion">
+              Buscá cualquier criptomoneda por nombre
+            </p>
+          </div>
+          <div class="buscador-form">
+            <input
+              type="text"
+              id="buscador-input"
+              class="buscador-input"
+              placeholder="Ej: bitcoin, ethereum, dogecoin..."
+            />
+            <button id="buscador-btn" class="buscador-btn">Buscar</button>
+          </div>
+          <div id="buscador-resultado" class="buscador-resultado">
+            <!--  se genera desde js -->
+          </div>
+        </div>
+      </section>
+      <section id="tendencias" class="tendencias">
+        <div class="contenedor-tendencias">
+          <div class="tendencias-header">
+            <h2 class="tendencias-titulo">Tendencias 🔥 </h2>
+            <p class="tendencias-descripcion">
+              Las criptomonedas más buscadas del momento
+            </p>
+          </div>
+          <div class="tendencias-grid" id="tendencias-grid">
+            <!-- se genera desde js -->
+          </div>
+        </div>
+      </section>
+    </main>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
