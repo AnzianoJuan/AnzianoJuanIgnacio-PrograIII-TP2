@@ -1,0 +1,18 @@
+.error-visible {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #f87171;
+  text-align: center;
+  font-weight: 500;
+  margin: 1rem 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
+  animation: sutilEntrada 0.3s ease-out;
+}
+
+@keyframes sutilEntrada {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

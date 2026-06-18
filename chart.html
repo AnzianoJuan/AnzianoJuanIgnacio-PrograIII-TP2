@@ -1,16 +1,18 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chart - Quant Analyzer</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./src/style.css" />
-    <link rel="stylesheet" href="./src/noticias.css" />
-    <title>Noticias — Quant Analyzer</title>
+    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/index.css" />
+    <link rel="stylesheet" href="src/chart.css" />
   </head>
   <body>
     <header>
@@ -29,28 +31,38 @@
             <li><a href="index.html#mercado">Mercado</a></li>
             <li><a href="index.html#buscador">Buscador</a></li>
             <li><a href="index.html#tendencias">Tendencias</a></li>
-            <li><a href="noticias.html" class="nav-activo">Noticias</a></li>
+            <li><a href="chart.html">Chart</a></li>
           </ul>
         </nav>
         <a href="index.html#buscador" class="btn-primario">Buscar cripto</a>
       </div>
     </header>
 
-    <main>
-      <section class="noticias">
-        <div class="contenedor-noticias">
-          <div class="noticias-header">
-            <h1 class="noticias-titulo">Noticias</h1>
-            <p class="noticias-descripcion">
-              Las últimas noticias del mundo cripto
-            </p>
-          </div>
-          <div class="noticias-grid" id="noticias-grid">
-            <!-- se genera desde JS -->
+    <main class="contenedor-principal">
+      <section class="seccion-chart">
+        <div class="chart-info">
+          <h2>Gráfico Interactivo</h2>
+          <p>
+            Visualizá la evolución del precio de las principales criptomonedas.
+            Seleccioná un activo y visualiza su rendimiento de los ultimos 7
+            dias.
+          </p>
+        </div>
+        <div class="controles-chart">
+          <div class="buscador-chart">
+            <input
+              type="text"
+              id="input-busqueda-cripto"
+              class="input-grafico"
+              placeholder="Ej: bitcoin"
+            />
+            <button id="btn-buscar-cripto" class="btn-tiempo">Buscar</button>
           </div>
         </div>
+        <div class="contenedor-canvas" id="contenedor-grafico"></div>
       </section>
     </main>
+
     <footer class="footer">
       <div class="contenedor-footer">
         <div class="footer-marca">
@@ -64,16 +76,14 @@
           </div>
           <p class="footer-slogan">Analizá el mercado cripto en tiempo real.</p>
         </div>
-
         <div class="footer-contacto">
           <h3 class="footer-titulo">Contacto</h3>
           <ul class="footer-lista">
-            <li> contacto@quantanalyzer.com</li>
-            <li> +54 11 4567-8910</li>
-            <li> Buenos Aires, Argentina</li>
+            <li>contacto@quantanalyzer.com</li>
+            <li>+54 11 4567-8910</li>
+            <li>Buenos Aires, Argentina</li>
           </ul>
         </div>
-
         <div class="footer-links">
           <h3 class="footer-titulo">Navegación</h3>
           <ul class="footer-lista">
@@ -81,10 +91,9 @@
             <li><a href="index.html#mercado">Mercado</a></li>
             <li><a href="index.html#buscador">Buscador</a></li>
             <li><a href="index.html#tendencias">Tendencias</a></li>
-            <li><a href="noticias.html">Noticias</a></li>
+            <li><a href="chart.html">Chart</a></li>
           </ul>
         </div>
-
         <div class="footer-redes">
           <h3 class="footer-titulo">Redes</h3>
           <ul class="footer-lista">
@@ -95,12 +104,11 @@
           </ul>
         </div>
       </div>
-
       <div class="footer-copy">
         <p>© 2026 Quant Analyzer — Todos los derechos reservados</p>
       </div>
     </footer>
 
-    <script type="module" src="./src/noticias.js"></script>
+    <script type="module" src="src/chart.js"></script>
   </body>
 </html>

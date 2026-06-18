@@ -3,38 +3,45 @@ const $buscadorInput = document.getElementById("buscador-input");
 const $buscadorBtn = document.getElementById("buscador-btn");
 const $buscadorResultado = document.getElementById("buscador-resultado");
 const $tendenciasGrid = document.getElementById("tendencias-grid");
+const API_URL = import.meta.env.VITE_API_URL;
+import { errores } from "./errores.js";
 
 //obtengo las 10 accciones mas relevantes
 async function obtenerLasAccionesMasRelevantes() {
   try {
     const res = await fetch(
-      "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1",
+      `${API_URL}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1`,
     );
+
+    if (!res.ok) {
+      throw new Error("Error en la api");
+    }
+
     const data = await res.json();
     renderizarAccionesRelevantes(data); //una vez hecho teniendo la data la renderizo
-  } catch {
+  } catch (error) {
+    errores($mercadoGrid, " en la carga de criptos");
     console.error("error");
   }
 }
 
 const renderizarAccionesRelevantes = (criptos) => {
   let html = "";
-
   criptos.forEach((cripto) => {
     html += `
-            <div class="cripto-card">
-                <div class="cripto-card-header">
-                    <img class="cripto-img" src="${cripto.image}" alt="${cripto.name}">
-                    <div>
-                        <p class="cripto-nombre">${cripto.name}</p>
-                        <p class="cripto-simbolo">${cripto.symbol}</p>
-                    </div>
-                </div>
-                <div class="cripto-card-footer">
-                    <p class="cripto-precio">$${cripto.current_price}</p>
-                </div>
-            </div>
-        `;
+      <div class="cripto-card">
+          <div class="cripto-card-header">
+              <img class="cripto-img" src="${cripto.image}" alt="${cripto.name}">
+              <div>
+                  <p class="cripto-nombre">${cripto.name}</p>
+                  <p class="cripto-simbolo">${cripto.symbol.toUpperCase()}</p>
+              </div>
+          </div>
+          <div class="cripto-card-footer">
+              <p class="cripto-precio">$${cripto.current_price.toLocaleString()}</p>
+          </div>
+      </div>
+    `;
   });
 
   $mercadoGrid.innerHTML = html;
@@ -49,14 +56,21 @@ setInterval(() => {
 
 async function buscarCripto(nombre) {
   try {
-    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${nombre}`);
+    const res = await fetch(`${API_URL}/coins/${nombre.toLowerCase()}`);
+
+    if (!res.ok) {
+      throw new Error("Error en la api");
+    }
+
     const cripto = await res.json();
     renderizarCripto(cripto); //llamo a renderizar cripto
   } catch (err) {
+    errores($buscadorResultado, `  no se encontro la cripto ${nombre}`);
     console.error(err);
   }
 }
 
+//carga el html de adentro del buscador resultado
 function renderizarCripto(cripto) {
   $buscadorResultado.innerHTML = `
         <div class="cripto-detalle">
@@ -88,10 +102,14 @@ $buscadorBtn.addEventListener("click", () => {
 
 async function obtenerTendencias() {
   try {
-    const res = await fetch("https://api.coingecko.com/api/v3/search/trending");
+    const res = await fetch(`${API_URL}/search/trending`);
+    if (!res.ok) {
+      throw new Error("error con la api");
+    }
     const tendencias = await res.json();
     renderizarTendencias(tendencias.coins);
   } catch {
+    errores($tendenciasGrid, " en cargar las tendencias");
     console.error("error");
   }
 }
@@ -109,14 +127,14 @@ const renderizarTendencias = (tendencias) => {
             </div>
         </div>
         <div class="cripto-card-footer">
-            <p class="cripto-precio">${parseFloat(tendencia.item.data.price).toLocaleString()}</p>
+            <p class="cripto-precio">${tendencia.item.data.price.toLocaleString()}</p>
         </div>
     </div>
 `;
   });
   $tendenciasGrid.innerHTML = html;
 };
- 
+
 obtenerTendencias();
 
 setInterval(() => {
