@@ -4,13 +4,14 @@ const $buscadorBtn = document.getElementById("buscador-btn");
 const $buscadorResultado = document.getElementById("buscador-resultado");
 const $tendenciasGrid = document.getElementById("tendencias-grid");
 
+//obtengo las 10 accciones mas relevantes
 async function obtenerLasAccionesMasRelevantes() {
   try {
     const res = await fetch(
       "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1",
     );
     const data = await res.json();
-    renderizarAccionesRelevantes(data);
+    renderizarAccionesRelevantes(data); //una vez hecho teniendo la data la renderizo
   } catch {
     console.error("error");
   }
@@ -50,43 +51,26 @@ async function buscarCripto(nombre) {
   try {
     const res = await fetch(`https://api.coingecko.com/api/v3/coins/${nombre}`);
     const cripto = await res.json();
-    renderizarCripto(cripto);
+    renderizarCripto(cripto); //llamo a renderizar cripto
   } catch (err) {
     console.error(err);
   }
 }
 
 function renderizarCripto(cripto) {
-  const variacion = cripto.market_data.price_change_percentage_24h.toFixed(2);
-  const esPositiva = variacion >= 0;
-
   $buscadorResultado.innerHTML = `
         <div class="cripto-detalle">
             <div class="cripto-detalle-header">
                 <img class="cripto-detalle-img" src="${cripto.image.large}" alt="${cripto.name}">
                 <div>
                     <h3 class="cripto-detalle-nombre">${cripto.name}</h3>
-                    <p class="cripto-detalle-simbolo">${cripto.symbol.toUpperCase()}</p>
+                    <p class="cripto-detalle-simbolo">${cripto.symbol}</p>
                 </div>
             </div>
             <div class="cripto-detalle-datos">
                 <div class="cripto-detalle-card">
                     <p class="cripto-detalle-label">Precio actual</p>
                     <p class="cripto-detalle-valor">$${cripto.market_data.current_price.usd.toLocaleString()}</p>
-                </div>
-                <div class="cripto-detalle-card">
-                    <p class="cripto-detalle-label">Variación 24hs</p>
-                    <p class="cripto-detalle-valor ${esPositiva ? "positiva" : "negativa"}">
-                        ${esPositiva ? "+" : ""}${variacion}%
-                    </p>
-                </div>
-                <div class="cripto-detalle-card">
-                    <p class="cripto-detalle-label">Máximo 24hs</p>
-                    <p class="cripto-detalle-valor">$${cripto.market_data.high_24h.usd.toLocaleString()}</p>
-                </div>
-                <div class="cripto-detalle-card">
-                    <p class="cripto-detalle-label">Mínimo 24hs</p>
-                    <p class="cripto-detalle-valor">$${cripto.market_data.low_24h.usd.toLocaleString()}</p>
                 </div>
             </div>
         </div>
@@ -132,5 +116,9 @@ const renderizarTendencias = (tendencias) => {
   });
   $tendenciasGrid.innerHTML = html;
 };
-
+ 
 obtenerTendencias();
+
+setInterval(() => {
+  obtenerTendencias();
+}, 60000);
