@@ -1,6 +1,4 @@
-/* =========================================
-   SECCIÓN CHART
-   ========================================= */
+
 .seccion-chart {
   padding: 4rem 5%;
   max-width: 1200px;
@@ -42,7 +40,6 @@
   color: var(--text-primary);
   font-family: inherit;
   font-size: 1rem;
-  cursor: pointer;
   outline: none;
 }
 

@@ -1,65 +1,106 @@
-const $inputBusqueda = document.getElementById("input-busqueda-cripto");
-const $btnBuscar = document.getElementById("btn-buscar-cripto");
-const $contenedorGrafico = document.getElementById("contenedor-grafico");
+import { Chart } from "chart.js/auto";
+import { errores } from "./errores.js";
+import { getElemById } from "./getElements.js";
+
+const $inputBusqueda = getElemById("input-busqueda-cripto");
+const $btnBuscar = getElemById("btn-buscar-cripto");
+const $contenedorGrafico = getElemById("contenedor-grafico");
 const API_URL = import.meta.env.VITE_API_URL;
+
+let graficoActual = null;
+
+function formatearFecha(timestamp) {
+  const fecha = new Date(timestamp);
+  return fecha.toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "short",
+  });
+}
 
 async function graficarUltimaSemana(cripto) {
   try {
     const res = await fetch(
       `${API_URL}/coins/${cripto.toLowerCase()}/market_chart?vs_currency=usd&days=7`,
     );
-    if (!res.ok) throw new Error("Cripto no encontrada");
-
+    if (!res.ok) {
+      throw new Error("Cripto no encontrada");
+    }
     const data = await res.json();
-    dibujarSVG(data.prices);
+    dibujarGrafico(data.prices);
   } catch (error) {
     errores($contenedorGrafico, "No se encontró el activo.");
+    console.error(error);
   }
 }
 
-function dibujarSVG(precios) {
-  const ancho = 800; // Ancho virtual del SVG
-  const alto = 300; // Alto virtual del SVG
+function dibujarGrafico(precios) {
+  // Recreamos el canvas en cada render (por si antes había un mensaje de error ahí)
+  $contenedorGrafico.innerHTML = `<canvas id="grafico-precios"></canvas>`;
+  const $canvas = getElemById("grafico-precios");
 
-  // Extraemos solo los valores de precio (índice 1 de cada array)
-  const valores = precios.map((p) => p[1]);
-  const min = Math.min(...valores);
-  const max = Math.max(...valores);
-  const rango = max - min;
+  const etiquetas = precios.map((p) => formatearFecha(p[0])); // fechas
+  const valores = precios.map((p) => p[1]); // precios
 
-  // Transformamos cada punto [timestamp, precio] a coordenadas [x, y]
-  const puntos = precios
-    .map((p, i) => {
-      // X: se distribuye proporcionalmente según la cantidad de datos
-      const x = (i / (precios.length - 1)) * ancho;
+  // Si ya había un gráfico previo, lo destruimos para liberar memoria
+  // (si no, queda "escuchando" eventos de un canvas que ya no existe)
+  if (graficoActual) {
+    graficoActual.destroy();
+  }
 
-      // Y: La lógica invertida.
-      // Restamos 'alto' porque en SVG el 0 está arriba.
-      // Si el precio es el máximo, Y debe ser 0 (arriba).
-      // Si el precio es el mínimo, Y debe ser 300 (abajo).
-      const y = alto - ((p[1] - min) / rango) * alto;
-
-      return `${x},${y}`;
-    })
-    .join(" ");
-
-  $contenedorGrafico.innerHTML = `
-    <svg viewBox="0 0 ${ancho} ${alto}" preserveAspectRatio="none" style="width:100%; height:100%; display:block;">
-      <polyline 
-        points="${puntos}" 
-        fill="none" 
-        stroke="#ffffff" 
-        stroke-width="2" 
-        vector-effect="non-scaling-stroke"
-      />
-    </svg>
-  `;
+  graficoActual = new Chart($canvas, {
+    type: "line",
+    data: {
+      labels: etiquetas,
+      datasets: [
+        {
+          label: "Precio (USD)",
+          data: valores,
+          borderColor: "#cf6e00",
+          backgroundColor: "rgba(207, 110, 0, 0.15)",
+          fill: true,
+          tension: 0.3, // curva suave en vez de líneas rectas
+          pointRadius: 0, // oculta los puntos por defecto
+          pointHoverRadius: 5, // aparecen al pasar el mouse
+          borderWidth: 2,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        x: {
+          grid: { color: "rgba(255,255,255,0.05)" },
+          ticks: { maxTicksLimit: 7, color: "#9a9a9a" },
+        },
+        y: {
+          grid: { color: "rgba(255,255,255,0.05)" },
+          ticks: {
+            color: "#9a9a9a",
+            callback: (valor) => `$${valor.toLocaleString()}`,
+          },
+        },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            // esto es lo que ves al pasar el mouse: precio + fecha
+            title: (contexto) => contexto[0].label,
+            label: (contexto) => `$${contexto.parsed.y.toLocaleString()}`,
+          },
+        },
+      },
+    },
+  });
 }
 
 $btnBuscar.addEventListener("click", () => {
   const nombre = $inputBusqueda.value.trim();
-  if (nombre) graficarUltimaSemana(nombre);
+  if (nombre) {
+    graficarUltimaSemana(nombre); //si es un truhty , entra
+  }
 });
 
-// Carga inicial (Bitcoin por defecto)
-graficarUltimaSemana("bitcoin");
+graficarUltimaSemana("bitcoin");// pongo aca un valor por default asi queda piola 
