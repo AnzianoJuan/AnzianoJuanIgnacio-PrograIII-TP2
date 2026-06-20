@@ -22,7 +22,7 @@ async function obtenerExchanges() {
 // Devuelve una clase distinta según el nivel de confianza, para pintar el badge, permitiendo modificar el css , atraves de template string
 // que sale de exchange.css
 function claseConfianza(trustScore) {
-  if (trustScore >= 8) {
+  if (trustScore >= 9) {
     return "badge-alta";
   }
   if (trustScore >= 5) {
