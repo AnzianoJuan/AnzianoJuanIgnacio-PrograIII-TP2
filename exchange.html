@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chart - Quant Analyzer</title>
+    <title>Exchanges - Quant Analyzer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -12,7 +12,7 @@
     />
     <link rel="stylesheet" href="src/style.css" />
     <link rel="stylesheet" href="src/index.css" />
-    <link rel="stylesheet" href="src/chart.css" />
+    <link rel="stylesheet" href="src/exchange.css" />
   </head>
   <body>
     <header>
@@ -32,34 +32,25 @@
             <li><a href="index.html#buscador">Buscador</a></li>
             <li><a href="index.html#tendencias">Tendencias</a></li>
             <li><a href="chart.html">Chart</a></li>
-            <li><a href="exchange.html">Exchanges</a></li>
+            <li><a href="exchanges.html">Exchanges</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
     <main class="contenedor-principal">
-      <section class="seccion-chart">
-        <div class="chart-info">
-          <h2>Gráfico Interactivo</h2>
+      <section class="seccion-exchanges">
+        <div class="exchanges-info">
+          <h2>Exchanges de Criptomonedas</h2>
           <p>
-            Visualizá la evolución del precio de las principales criptomonedas.
-            Seleccioná un activo y visualiza su rendimiento de los ultimos 7
-            dias.
+            Los exchanges más confiables del mercado, ordenados por nivel de
+            seguridad y volumen de operaciones.
           </p>
         </div>
-        <div class="controles-chart">
-          <div class="buscador-chart">
-            <input
-              type="text"
-              id="input-busqueda-cripto"
-              class="input-grafico"
-              placeholder="Ej: bitcoin"
-            />
-            <button id="btn-buscar-cripto" class="btn-tiempo">Buscar</button>
-          </div>
+
+        <div class="exchanges-grid" id="exchanges-grid">
+            <!-- aca cargo yo la grilla -->
         </div>
-        <div class="contenedor-canvas" id="contenedor-grafico"></div>
       </section>
     </main>
 
@@ -92,7 +83,7 @@
             <li><a href="index.html#buscador">Buscador</a></li>
             <li><a href="index.html#tendencias">Tendencias</a></li>
             <li><a href="chart.html">Chart</a></li>
-            <li><a href="exchange.html">Exchanges</a></li>
+            <li><a href="exchanges.html">Exchanges</a></li>
           </ul>
         </div>
         <div class="footer-redes">
@@ -110,6 +101,6 @@
       </div>
     </footer>
 
-    <script type="module" src="src/chart.js"></script>
+    <script type="module" src="src/exchange.js"></script>
   </body>
 </html>
