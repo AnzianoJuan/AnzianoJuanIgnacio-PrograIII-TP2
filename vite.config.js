@@ -8,7 +8,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, "index.html"),
         chart: resolve(__dirname, "chart.html"),
-        exchange: resolve(__dirname, "exchange.html"),
+        exchange: resolve(__dirname, "exchange.html"), // ✅ singular, como tu archivo real
       },
     },
   },
