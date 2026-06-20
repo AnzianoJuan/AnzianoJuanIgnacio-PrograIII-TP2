@@ -50,9 +50,9 @@ const renderizarAccionesRelevantes = (criptos) => {
 
 obtenerLasAccionesMasRelevantes();
 
-setInterval(() => {
-  obtenerLasAccionesMasRelevantes();
-}, 60000);
+// setInterval(() => {
+  // obtenerLasAccionesMasRelevantes();
+// }, 60000);
 
 //  Búsqueda de cripto, primero ID , luego nombre
 async function buscarCripto(nombre) {
@@ -153,6 +153,6 @@ const renderizarTendencias = (tendencias) => {
 
 obtenerTendencias();
 
-setInterval(() => {
-  obtenerTendencias();
-}, 60000);
+// setInterval(() => {
+  // obtenerTendencias();
+// }, 60000);
