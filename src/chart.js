@@ -19,8 +19,24 @@ function formatearFecha(timestamp) {
 
 async function graficarUltimaSemana(cripto) {
   try {
+    const resBusqueda = await fetch(`${API_URL}/search?query=${cripto}`);
+
+    if (!resBusqueda.ok) {
+      throw new Error("Error en la búsqueda");
+    }
+
+    const dataBusqueda = await resBusqueda.json();
+
+    if (dataBusqueda.coins.length === 0) {
+      errores($contenedorGrafico, "No se encontró el activo.");
+      return;
+    }
+
+    const idCorrecto = dataBusqueda.coins[0].id;
+
+    // 2️ Ahora le pedimos el gráfico con el ID correcto
     const res = await fetch(
-      `${API_URL}/coins/${cripto.toLowerCase()}/market_chart?vs_currency=usd&days=7`,
+      `${API_URL}/coins/${idCorrecto}/market_chart?vs_currency=usd&days=7`,
     );
     if (!res.ok) {
       throw new Error("Cripto no encontrada");
@@ -103,4 +119,4 @@ $btnBuscar.addEventListener("click", () => {
   }
 });
 
-graficarUltimaSemana("bitcoin");// pongo aca un valor por default asi queda piola 
+graficarUltimaSemana("bitcoin"); // pongo aca un valor por default asi queda piola
