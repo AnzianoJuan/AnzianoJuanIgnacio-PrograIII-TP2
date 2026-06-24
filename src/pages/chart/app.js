@@ -1,6 +1,7 @@
 import { Chart } from "chart.js/auto";
 import { errores } from "@/errores.js";
 import { getElemById } from "@/getElements.js";
+import { graficarUltimaSemana } from "@/services/ChartServices.js";
 
 const $inputBusqueda = getElemById("input-busqueda-cripto");
 const $btnBuscar = getElemById("btn-buscar-cripto");
@@ -17,32 +18,10 @@ function formatearFecha(timestamp) {
   });
 }
 
-async function graficarUltimaSemana(cripto) {
+async function graficarCripto(cripto) {
   try {
-    const resBusqueda = await fetch(`${API_URL}/search?query=${cripto}`);
-
-    if (!resBusqueda.ok) {
-      throw new Error("Error en la búsqueda");
-    }
-
-    const dataBusqueda = await resBusqueda.json();
-
-    if (dataBusqueda.coins.length === 0) {
-      errores($contenedorGrafico, "No se encontró el activo.");
-      return;
-    }
-
-    const idCorrecto = dataBusqueda.coins[0].id;
-
-    // 2️ Ahora le pedimos el gráfico con el ID correcto
-    const res = await fetch(
-      `${API_URL}/coins/${idCorrecto}/market_chart?vs_currency=usd&days=7`,
-    );
-    if (!res.ok) {
-      throw new Error("Cripto no encontrada");
-    }
-    const data = await res.json();
-    dibujarGrafico(data.prices);
+    const { prices } = await graficarUltimaSemana(cripto);
+    dibujarGrafico(prices);
   } catch (error) {
     errores($contenedorGrafico, "No se encontró el activo.");
     console.error(error);
@@ -115,8 +94,8 @@ function dibujarGrafico(precios) {
 $btnBuscar.addEventListener("click", () => {
   const nombre = $inputBusqueda.value.trim();
   if (nombre) {
-    graficarUltimaSemana(nombre); //si es un truhty , entra
+    graficarCripto(nombre); //si es un truhty , entra
   }
 });
 
-graficarUltimaSemana("bitcoin"); // pongo aca un valor por default asi queda piola
+graficarCripto("bitcoin"); // pongo aca un valor por default asi queda piola

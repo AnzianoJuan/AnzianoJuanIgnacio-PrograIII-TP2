@@ -27,10 +27,14 @@ async function cargarMercado() {
 
 function filtrarPorVariacion(criptos, criterio) {
   if (criterio === "subiendo") {
-    return criptos.filter((cripto) => cripto.price_change_percentage_24h > 0);
+    return criptos.filter(
+      ({ price_change_percentage_24h }) => price_change_percentage_24h > 0,
+    );
   }
   if (criterio === "bajando") {
-    return criptos.filter((cripto) => cripto.price_change_percentage_24h < 0);
+    return criptos.filter(
+      ({ price_change_percentage_24h }) => price_change_percentage_24h < 0,
+    );
   }
   return criptos;
 }
@@ -48,18 +52,18 @@ function aplicarFiltro() {
 
 const renderizarAccionesRelevantes = (criptos) => {
   let html = "";
-  criptos.forEach((cripto) => {
+  criptos.forEach(({ image, name, symbol, current_price }) => {
     html += `
       <div class="cripto-card">
           <div class="cripto-card-header">
-              <img class="cripto-img" src="${cripto.image}" alt="${cripto.name}">
+              <img class="cripto-img" src="${image}" alt="${name}">
               <div>
-                  <p class="cripto-nombre">${cripto.name}</p>
-                  <p class="cripto-simbolo">${cripto.symbol.toUpperCase()}</p>
+                  <p class="cripto-nombre">${name}</p>
+                  <p class="cripto-simbolo">${symbol.toUpperCase()}</p>
               </div>
           </div>
           <div class="cripto-card-footer">
-              <p class="cripto-precio">$${cripto.current_price.toLocaleString()}</p>
+              <p class="cripto-precio">$${current_price.toLocaleString()}</p>
           </div>
       </div>
     `;
@@ -84,20 +88,27 @@ async function buscarCripto(nombre) {
   }
 }
 
-function renderizarCripto(cripto) {
+function renderizarCripto({
+  name,
+  symbol,
+  image: { large },
+  market_data: {
+    current_price: { usd },
+  },
+}) {
   $buscadorResultado.innerHTML = `
         <div class="cripto-detalle">
             <div class="cripto-detalle-header">
-                <img class="cripto-detalle-img" src="${cripto.image.large}" alt="${cripto.name}">
+                <img class="cripto-detalle-img" src="${large}" alt="${name}">
                 <div>
-                    <h3 class="cripto-detalle-nombre">${cripto.name}</h3>
-                    <p class="cripto-detalle-simbolo">${cripto.symbol}</p>
+                    <h3 class="cripto-detalle-nombre">${name}</h3>
+                    <p class="cripto-detalle-simbolo">${symbol}</p>
                 </div>
             </div>
             <div class="cripto-detalle-datos">
                 <div class="cripto-detalle-card">
                     <p class="cripto-detalle-label">Precio actual</p>
-                    <p class="cripto-detalle-valor">$${cripto.market_data.current_price.usd.toLocaleString()}</p>
+                    <p class="cripto-detalle-valor">$${usd.toLocaleString()}</p>
                 </div>
             </div>
         </div>
