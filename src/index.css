@@ -503,3 +503,19 @@ header {
   font-size: 1rem;
   cursor: pointer;
 }
+
+.cripto-variacion,
+.cripto-detalle-valor.variacion-positiva,
+.cripto-detalle-valor.variacion-negativa {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+.variacion-positiva {
+  color: #22c55e; /* verde */
+}
+
+.variacion-negativa {
+  color: #ef4444; /* rojo */
+}

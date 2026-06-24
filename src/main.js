@@ -52,8 +52,15 @@ function aplicarFiltro() {
 
 const renderizarAccionesRelevantes = (criptos) => {
   let html = "";
-  criptos.forEach(({ image, name, symbol, current_price }) => {
-    html += `
+  criptos.forEach(
+    ({ image, name, symbol, current_price, price_change_percentage_24h }) => {
+      const esPositiva = price_change_percentage_24h > 0;
+      const claseVariacion = esPositiva
+        ? "variacion-positiva"
+        : "variacion-negativa";
+      const signo = esPositiva ? "+" : "";
+
+      html += `
       <div class="cripto-card">
           <div class="cripto-card-header">
               <img class="cripto-img" src="${image}" alt="${name}">
@@ -64,10 +71,14 @@ const renderizarAccionesRelevantes = (criptos) => {
           </div>
           <div class="cripto-card-footer">
               <p class="cripto-precio">$${current_price.toLocaleString()}</p>
+              <p class="cripto-variacion ${claseVariacion}">
+                ${signo}${price_change_percentage_24h.toFixed(2)}%
+              </p>
           </div>
       </div>
     `;
-  });
+    },
+  );
   $mercadoGrid.innerHTML = html;
 };
 
@@ -94,8 +105,15 @@ function renderizarCripto({
   image: { large },
   market_data: {
     current_price: { usd },
+    price_change_percentage_24h,
   },
 }) {
+  const esPositiva = price_change_percentage_24h > 0;
+  const claseVariacion = esPositiva
+    ? "variacion-positiva"
+    : "variacion-negativa";
+  const signo = esPositiva ? "+" : "";
+
   $buscadorResultado.innerHTML = `
         <div class="cripto-detalle">
             <div class="cripto-detalle-header">
@@ -109,6 +127,12 @@ function renderizarCripto({
                 <div class="cripto-detalle-card">
                     <p class="cripto-detalle-label">Precio actual</p>
                     <p class="cripto-detalle-valor">$${usd.toLocaleString()}</p>
+                </div>
+                <div class="cripto-detalle-card">
+                    <p class="cripto-detalle-label">Variación 24h</p>
+                    <p class="cripto-detalle-valor ${claseVariacion}">
+                      ${signo}${price_change_percentage_24h.toFixed(2)}%
+                    </p>
                 </div>
             </div>
         </div>
@@ -135,22 +159,41 @@ async function cargarTendencias() {
 
 const renderizarTendencias = (tendencias) => {
   let html = "";
-  tendencias.forEach((tendencia) => {
-    html += `
-    <div class="cripto-card">
-        <div class="cripto-card-header">
-            <img class="cripto-img" src="${tendencia.item.small}" alt="${tendencia.item.name}">
-            <div>
-                <p class="cripto-nombre">${tendencia.item.name}</p>
-                <p class="cripto-simbolo">${tendencia.item.symbol}</p>
+  tendencias.forEach(
+    ({
+      item: {
+        small,
+        name,
+        symbol,
+        data: { price, price_change_percentage_24h },
+      },
+    }) => {
+      const variacionUsd = price_change_percentage_24h.usd;
+      const esPositiva = variacionUsd > 0;
+      const claseVariacion = esPositiva
+        ? "variacion-positiva"
+        : "variacion-negativa";
+      const signo = esPositiva ? "+" : "";
+
+      html += `
+        <div class="cripto-card">
+            <div class="cripto-card-header">
+                <img class="cripto-img" src="${small}" alt="${name}">
+                <div>
+                    <p class="cripto-nombre">${name}</p>
+                    <p class="cripto-simbolo">${symbol}</p>
+                </div>
+            </div>
+            <div class="cripto-card-footer">
+                <p class="cripto-precio">$${price.toLocaleString()}</p>
+                <p class="cripto-variacion ${claseVariacion}">
+                  ${signo}${variacionUsd.toFixed(2)}%
+                </p>
             </div>
         </div>
-        <div class="cripto-card-footer">
-            <p class="cripto-precio"> $${tendencia.item.data.price.toLocaleString()}</p>
-        </div>
-    </div>
-`;
-  });
+      `;
+    },
+  );
   $tendenciasGrid.innerHTML = html;
 };
 
