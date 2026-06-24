@@ -37,8 +37,8 @@ body {
 }
 
 .nav-activo {
-    color: var(--text-primary) !important;
-    border-bottom: 1px solid var(--text-secondary) !important;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--text-secondary);
 }
 
 .footer {

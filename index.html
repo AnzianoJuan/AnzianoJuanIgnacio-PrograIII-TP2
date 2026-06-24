@@ -9,7 +9,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="src/styles.css" />
     <link rel="stylesheet" href="src/index.css" />
     <title>Quant-Analyzer</title>
   </head>
@@ -30,8 +30,8 @@
             <li><a href="#mercado">Mercado</a></li>
             <li><a href="#buscador">Buscador</a></li>
             <li><a href="#tendencias">Tendencias</a></li>
-            <li><a href="chart.html">Chart</a></li>
-            <li><a href="exchange.html">Exchanges</a></li>
+            <li><a href="src/pages/chart/index.html">Chart</a></li>
+            <li><a href="src/pages/exchange/index.html">Exchanges</a></li>
           </ul>
         </nav>
       </div>
@@ -55,11 +55,19 @@
           <div class="mercado-header">
             <h2 class="mercado-titulo">Mercado</h2>
             <p class="mercado-descripcion">
-              Las 10 criptomonedas con mayor market cap del momento
+              Conoce la variación de las criptomonedas mas relevantes del mercado!
             </p>
           </div>
+          <div class="controles-mercado">
+            <select id="filtro-variacion" class="select-filtro">
+              <option value="todas">Todas</option>
+              <option value="subiendo">Subiendo</option>
+              <option value="bajando">Bajando</option>
+            </select>
+          </div>
+
           <div class="mercado-grid" id="mercado-grid">
-            <!-- estas las genere yo con javascrpt -->
+            <!-- estas las genere yo con javascript -->
           </div>
         </div>
       </section>
@@ -129,8 +137,8 @@
             <li><a href="index.html#mercado">Mercado</a></li>
             <li><a href="index.html#buscador">Buscador</a></li>
             <li><a href="index.html#tendencias">Tendencias</a></li>
-            <li><a href="chart.html">Chart</a></li>
-            <li><a href="exchange.html">Exchanges</a></li>
+            <li><a href="src/pages/chart/index.html">Chart</a></li>
+            <li><a href="src/pages/exchange/index.html">Exchanges</a></li>
           </ul>
         </div>
 
@@ -149,7 +157,6 @@
         <p>© 2026 Quant Analyzer — Todos los derechos reservados</p>
       </div>
     </footer>
-    <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

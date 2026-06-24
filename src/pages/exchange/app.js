@@ -1,23 +1,21 @@
-import { errores } from "./errores.js";
-import { getElemById } from "./getElements.js";
+// src/pages/exchange/app.js
+import { errores } from "@/errores.js";
+import { getElemById } from "@/getElements.js";
+import { obtenerExchanges } from "@/services/ExchangeServices.js";
+
 
 const $exchangesGrid = getElemById("exchanges-grid");
-const API_URL = import.meta.env.VITE_API_URL;
 
-async function obtenerExchanges() {
+async function getExchanges() {
   try {
-    const res = await fetch(`${API_URL}/exchanges?per_page=20&page=1`);
-    if (!res.ok) {
-      throw new Error("Error en la api de exchanges");
-    }
-
-    const data = await res.json();
+    const data = await obtenerExchanges();
     renderizarExchanges(data); // ya viene ordenado por trust_score_rank
   } catch (error) {
     errores($exchangesGrid, " al cargar los exchanges");
     console.error(error);
   }
 }
+
 
 // Devuelve una clase distinta según el nivel de confianza, para pintar el badge, permitiendo modificar el css , atraves de template string
 // que sale de exchange.css
@@ -59,4 +57,4 @@ function renderizarExchanges(exchanges) {
   $exchangesGrid.innerHTML = html;
 }
 
-obtenerExchanges();
+getExchanges();

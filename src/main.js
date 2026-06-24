@@ -1,32 +1,51 @@
 import { errores } from "./errores.js";
 import { getElemById } from "./getElements.js";
+import { obtenerMercado } from "@/services/MercadoServices.js";
+import { buscarCriptoPorNombre } from "@/services/BuscadorServices.js";
+import { obtenerTendencias } from "@/services/TendenciasServices.js";
 
 const $mercadoGrid = getElemById("mercado-grid");
 const $buscadorInput = getElemById("buscador-input");
 const $buscadorBtn = getElemById("buscador-btn");
 const $buscadorResultado = getElemById("buscador-resultado");
 const $tendenciasGrid = getElemById("tendencias-grid");
-const API_URL = import.meta.env.VITE_API_URL;
+const $filtroVariacion = getElemById("filtro-variacion");
 
-//  Obtengo las 10 criptos más relevantes
-async function obtenerLasAccionesMasRelevantes() {
+let datosMercado = [];
+
+//  MERCADO
+async function cargarMercado() {
   try {
-    const res = await fetch(
-      `${API_URL}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1`,
-    );
-    if (!res.ok) {
-      throw new Error("Error en la api");
-    }
-
-    const data = await res.json();
-    renderizarAccionesRelevantes(data);
+    const data = await obtenerMercado();
+    datosMercado = data;
+    aplicarFiltro();
   } catch (error) {
     errores($mercadoGrid, " en la carga de criptos");
     console.error(error);
   }
 }
 
-//renderizo las criptos mas relevantes atraves de innerHTML
+function filtrarPorVariacion(criptos, criterio) {
+  if (criterio === "subiendo") {
+    return criptos.filter((cripto) => cripto.price_change_percentage_24h > 0);
+  }
+  if (criterio === "bajando") {
+    return criptos.filter((cripto) => cripto.price_change_percentage_24h < 0);
+  }
+  return criptos;
+}
+
+function aplicarFiltro() {
+  const resultado = filtrarPorVariacion(datosMercado, $filtroVariacion.value);
+
+  if (resultado.length === 0) {
+    errores($mercadoGrid, " no hay resultados con ese filtro");
+    return;
+  }
+
+  renderizarAccionesRelevantes(resultado);
+}
+
 const renderizarAccionesRelevantes = (criptos) => {
   let html = "";
   criptos.forEach((cripto) => {
@@ -48,34 +67,16 @@ const renderizarAccionesRelevantes = (criptos) => {
   $mercadoGrid.innerHTML = html;
 };
 
-obtenerLasAccionesMasRelevantes();
+cargarMercado();
+$filtroVariacion.addEventListener("change", aplicarFiltro);
 
-// setInterval(() => {
-  // obtenerLasAccionesMasRelevantes();
-// }, 60000);
-
-//  Búsqueda de cripto, primero ID , luego nombre
 async function buscarCripto(nombre) {
   try {
-    const resBusqueda = await fetch(`${API_URL}/search?query=${nombre}`);
-    if (!resBusqueda.ok) {
-      throw new Error("Error en la búsqueda");
-    }
-    const dataBusqueda = await resBusqueda.json();
-
-    if (dataBusqueda.coins.length === 0) {
+    const cripto = await buscarCriptoPorNombre(nombre);
+    if (!cripto) {
       errores($buscadorResultado, ` no se encontró la cripto ${nombre}`);
       return;
     }
-
-    const idCorrecto = dataBusqueda.coins[0].id;
-
-    const res = await fetch(`${API_URL}/coins/${idCorrecto}`);
-    if (!res.ok) {
-      throw new Error("Error en la api");
-    }
-
-    const cripto = await res.json();
     renderizarCripto(cripto);
   } catch (err) {
     errores($buscadorResultado, ` no se encontró la cripto ${nombre}`);
@@ -83,8 +84,6 @@ async function buscarCripto(nombre) {
   }
 }
 
-
-//renderizo la cripto si fue encontrada en la busqueda!
 function renderizarCripto(cripto) {
   $buscadorResultado.innerHTML = `
         <div class="cripto-detalle">
@@ -105,31 +104,24 @@ function renderizarCripto(cripto) {
     `;
 }
 
-//se lanza el evento para buscar la cripto
 $buscadorBtn.addEventListener("click", () => {
   const nombre = $buscadorInput.value.trim();
   if (nombre === "") {
-    return;//si es usuario no escribio nada, corta aca
+    return;
   }
   buscarCripto(nombre);
 });
 
-//  obtengo las criptos que sean mas buscadas en el ultimo momento
-async function obtenerTendencias() {
+async function cargarTendencias() {
   try {
-    const res = await fetch(`${API_URL}/search/trending`);
-    if (!res.ok) {
-      throw new Error("error con la api");
-    }
-    const tendencias = await res.json();
-    renderizarTendencias(tendencias.coins);
+    const tendencias = await obtenerTendencias();
+    renderizarTendencias(tendencias);
   } catch (error) {
     errores($tendenciasGrid, " en cargar las tendencias");
     console.error(error);
   }
 }
 
-//renderiza las tendencias atraves del grid , primero se acumulan porque son un conjunto
 const renderizarTendencias = (tendencias) => {
   let html = "";
   tendencias.forEach((tendencia) => {
@@ -151,8 +143,4 @@ const renderizarTendencias = (tendencias) => {
   $tendenciasGrid.innerHTML = html;
 };
 
-obtenerTendencias();
-
-// setInterval(() => {
-  // obtenerTendencias();
-// }, 60000);
+cargarTendencias();

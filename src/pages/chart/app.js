@@ -1,6 +1,6 @@
 import { Chart } from "chart.js/auto";
-import { errores } from "./errores.js";
-import { getElemById } from "./getElements.js";
+import { errores } from "@/errores.js";
+import { getElemById } from "@/getElements.js";
 
 const $inputBusqueda = getElemById("input-busqueda-cripto");
 const $btnBuscar = getElemById("btn-buscar-cripto");
