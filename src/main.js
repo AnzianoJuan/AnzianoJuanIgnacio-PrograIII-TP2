@@ -10,6 +10,7 @@ const $buscadorBtn = getElemById("buscador-btn");
 const $buscadorResultado = getElemById("buscador-resultado");
 const $tendenciasGrid = getElemById("tendencias-grid");
 const $filtroVariacion = getElemById("filtro-variacion");
+const $ordenPrecio = getElemById("orden-precio");
 
 let datosMercado = [];
 
@@ -40,7 +41,8 @@ function filtrarPorVariacion(criptos, criterio) {
 }
 
 function aplicarFiltro() {
-  const resultado = filtrarPorVariacion(datosMercado, $filtroVariacion.value);
+  let resultado = filtrarPorVariacion(datosMercado, $filtroVariacion.value);
+  resultado = ordenarPorPrecio(resultado, $ordenPrecio.value);
 
   if (resultado.length === 0) {
     errores($mercadoGrid, " no hay resultados con ese filtro");
@@ -81,9 +83,6 @@ const renderizarAccionesRelevantes = (criptos) => {
   );
   $mercadoGrid.innerHTML = html;
 };
-
-cargarMercado();
-$filtroVariacion.addEventListener("change", aplicarFiltro);
 
 async function buscarCripto(nombre) {
   try {
@@ -198,3 +197,17 @@ const renderizarTendencias = (tendencias) => {
 };
 
 cargarTendencias();
+
+function ordenarPorPrecio(criptos, direccion) {
+  if (direccion === "desc") {
+    return criptos.toSorted((a, b) => b.current_price - a.current_price);
+  }
+  if (direccion === "asc") {
+    return criptos.toSorted((a, b) => a.current_price - b.current_price);
+  }
+  return criptos;
+}
+
+cargarMercado();
+$filtroVariacion.addEventListener("change", aplicarFiltro);
+$ordenPrecio.addEventListener("change", aplicarFiltro); 
