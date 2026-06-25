@@ -28,9 +28,6 @@
         <nav>
           <ul class="nav-ul">
             <li><a href="/index.html">Inicio</a></li>
-            <li><a href="/index.html#mercado">Mercado</a></li>
-            <li><a href="/index.html#buscador">Buscador</a></li>
-            <li><a href="/index.html#tendencias">Tendencias</a></li>
             <li><a href="/src/pages/chart/index.html">Chart</a></li>
             <li><a href="/src/pages/exchange/index.html">Exchanges</a></li>
           </ul>
@@ -41,13 +38,18 @@
     <main class="contenedor-principal">
       <section class="seccion-chart">
         <div class="chart-info">
-          <h2>Gráfico </h2>
+          <h2>Gráfico</h2>
           <p>
-            Visualizá la evolución del precio de las principales criptomonedas.
-            Seleccioná un activo y visualiza su rendimiento de los ultimos 7
-            dias.
+            Visualizá la evolución del precio de las principales criptomonedas a
+            través de un gráfico interactivo y detallado. Seleccioná el activo
+            que te interese y analizá su rendimiento durante los últimos 7 días,
+            identificando subas, bajas y el comportamiento general del mercado
+            en ese período. Esta herramienta te permite tomar decisiones más
+            informadas al momento de invertir o simplemente seguir de cerca tus
+            criptomonedas favoritas.
           </p>
         </div>
+
         <div class="controles-chart">
           <div class="buscador-chart">
             <input
@@ -59,6 +61,25 @@
             <button id="btn-buscar-cripto" class="btn-tiempo">Buscar</button>
           </div>
         </div>
+        <div class="chart-stats" id="chart-stats">
+          <div class="stat-item">
+            <span class="stat-item-label">Activo</span>
+            <span class="stat-item-value" id="stat-nombre">—</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-item-label">Precio actual</span>
+            <span class="stat-item-value" id="stat-precio">—</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-item-label">Volumen 24h</span>
+            <span class="stat-item-value" id="stat-volumen">—</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-item-label">Market Cap</span>
+            <span class="stat-item-value" id="stat-marketcap">—</span>
+          </div>
+        </div>
+
         <div class="contenedor-canvas" id="contenedor-grafico"></div>
       </section>
     </main>

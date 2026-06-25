@@ -255,7 +255,7 @@ header {
 .cripto-nombre {
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: rgb(255, 255, 255);
 }
 
 .cripto-simbolo {
@@ -272,7 +272,7 @@ header {
 .cripto-precio {
   font-size: 15px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: wheat;
 }
 
 .buscador {

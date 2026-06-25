@@ -6,6 +6,10 @@ import { graficarUltimaSemana } from "@/services/ChartServices.js";
 const $inputBusqueda = getElemById("input-busqueda-cripto");
 const $btnBuscar = getElemById("btn-buscar-cripto");
 const $contenedorGrafico = getElemById("contenedor-grafico");
+const $statNombre = getElemById("stat-nombre");
+const $statPrecio = getElemById("stat-precio");
+const $statVolumen = getElemById("stat-volumen");
+const $statMarketCap = getElemById("stat-marketcap");
 const API_URL = import.meta.env.VITE_API_URL;
 
 let graficoActual = null;
@@ -20,12 +24,24 @@ function formatearFecha(timestamp) {
 
 async function graficarCripto(cripto) {
   try {
-    const { prices } = await graficarUltimaSemana(cripto);
+    const { prices, total_volumes, market_caps } = await graficarUltimaSemana(cripto);
     dibujarGrafico(prices);
+    mostrarEstadisticas(cripto, prices, total_volumes, market_caps);
   } catch (error) {
     errores($contenedorGrafico, "No se encontró el activo.");
     console.error(error);
   }
+}
+
+function mostrarEstadisticas(cripto, precios, volumenes, marketCaps) {
+  const precioActual = precios[precios.length - 1][1];
+  const volumenActual = volumenes[volumenes.length - 1][1];
+  const marketCapActual = marketCaps[marketCaps.length - 1][1];
+
+  $statNombre.textContent = cripto.toUpperCase();
+  $statPrecio.textContent = `$${precioActual.toLocaleString()}`;
+  $statVolumen.textContent = `$${volumenActual.toLocaleString()}`;
+  $statMarketCap.textContent = `$${marketCapActual.toLocaleString()}`;
 }
 
 function dibujarGrafico(precios) {

@@ -1,4 +1,3 @@
-
 .seccion-chart {
   padding: 4rem 5%;
   max-width: 1200px;
@@ -60,7 +59,8 @@
 }
 
 /* Al pasar el mouse o estar activo, se pone blanco con texto negro */
-.btn-tiempo.activo, .btn-tiempo:hover {
+.btn-tiempo.activo,
+.btn-tiempo:hover {
   background: var(--accent);
   color: var(--bg-primary);
   border-color: var(--accent);
@@ -70,9 +70,9 @@
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   width: 100%;
-  height: 500px; 
+  height: 500px;
   border: 1px solid var(--border);
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 /* Responsive para celulares */
@@ -86,5 +86,65 @@
   }
   .botones-tiempo {
     justify-content: center;
+  }
+}
+
+/* ============ CHART STATS (resumen del activo) ============ */
+
+.chart-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.stat-item {
+  background: var(--bg-card);
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stat-item-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.stat-item-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.stat-item-value.subida {
+  color: #22c55e;
+}
+
+.stat-item-value.bajada {
+  color: #ef4444;
+}
+
+@media (max-width: 768px) {
+  .chart-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stat-item:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 420px) {
+  .chart-stats {
+    grid-template-columns: 1fr;
+  }
+  .stat-item:first-child {
+    grid-column: 1;
   }
 }

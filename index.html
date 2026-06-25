@@ -26,10 +26,6 @@
         </div>
         <nav>
           <ul class="nav-ul">
-            <li><a href="#inicio">Inicio</a></li>
-            <li><a href="#mercado">Mercado</a></li>
-            <li><a href="#buscador">Buscador</a></li>
-            <li><a href="#tendencias">Tendencias</a></li>
             <li><a href="src/pages/chart/index.html">Chart</a></li>
             <li><a href="src/pages/exchange/index.html">Exchanges</a></li>
           </ul>
@@ -47,36 +43,12 @@
             Buscá cualquier criptomoneda, seguí su precio actual, variación del
             día
           </p>
-          <a href="#buscador" class="btn-primario">Empezar ahora</a>
+          <a href="src/pages/chart/index.html" class="btn-primario"
+            >Empezar ahora</a
+          >
         </div>
       </section>
-      <section id="mercado" class="mercado">
-        <div class="contenedor-mercado">
-          <div class="mercado-header">
-            <h2 class="mercado-titulo">Mercado</h2>
-            <p class="mercado-descripcion">
-              Conoce la variación de las criptomonedas con mas market cap del
-              mercado!
-            </p>
-          </div>
-          <div class="controles-mercado">
-            <select id="filtro-variacion" class="select-filtro">
-              <option value="todas">Todas</option>
-              <option value="subiendo">Subiendo</option>
-              <option value="bajando">Bajando</option>
-            </select>
-            <select id="orden-precio" class="select-filtro">
-              <option value="default">Precio</option>
-              <option value="desc">Precio: mayor a menor</option>
-              <option value="asc">Precio: menor a mayor</option>
-            </select>
-          </div>
 
-          <div class="mercado-grid" id="mercado-grid">
-            <!-- estas las genere yo con javascript -->
-          </div>
-        </div>
-      </section>
       <section id="buscador" class="buscador">
         <div class="contenedor-buscador">
           <div class="buscador-header">
@@ -97,12 +69,49 @@
           </div>
         </div>
       </section>
+      <section id="mercado" class="mercado">
+        <div class="contenedor-mercado">
+          <div class="mercado-header">
+            <h2 class="mercado-titulo">Mercado</h2>
+            <p class="mercado-descripcion">
+              Monitoreá en tiempo real el comportamiento de las criptomonedas
+              con mayor capitalización de mercado. Cada activo muestra su precio
+              actual en dólares y su variación porcentual en las últimas 24
+              horas, lo que te permite identificar rápidamente qué monedas están
+              en alza y cuáles en baja. Utilizá los filtros disponibles para
+              ordenar por precio o para visualizar únicamente los activos en
+              tendencia positiva o negativa, según el análisis que necesites
+              realizar.
+            </p>
+          </div>
+          <div class="controles-mercado">
+            <select id="filtro-variacion" class="select-filtro">
+              <option value="todas">Todas</option>
+              <option value="subiendo">Subiendo</option>
+              <option value="bajando">Bajando</option>
+            </select>
+            <select id="orden-precio" class="select-filtro">
+              <option value="default">Precio</option>
+              <option value="desc">Precio: mayor a menor</option>
+              <option value="asc">Precio: menor a mayor</option>
+            </select>
+          </div>
+          <div class="mercado-grid" id="mercado-grid">
+            <!-- estas las genere yo con javascript -->
+          </div>
+        </div>
+      </section>
       <section id="tendencias" class="tendencias">
         <div class="contenedor-tendencias">
           <div class="tendencias-header">
             <h2 class="tendencias-titulo">Tendencias</h2>
             <p class="tendencias-descripcion">
-              Las 15 criptomonedas más buscadas del momento
+              Estas son las 15 criptomonedas con mayor volumen de búsquedas en
+              las últimas 24 horas, un indicador clave del interés y la
+              actividad de los inversores en el mercado. El ranking se actualiza
+              dinámicamente a medida que cambia el comportamiento de los
+              usuarios, reflejando en tiempo real qué activos están capturando
+              la atención del mercado cripto en este momento.
             </p>
           </div>
           <div class="tendencias-grid" id="tendencias-grid">
