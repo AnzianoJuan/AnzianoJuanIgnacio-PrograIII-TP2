@@ -14,6 +14,10 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
         chart: resolve(__dirname, "src/pages/chart/index.html"),
         exchange: resolve(__dirname, "src/pages/exchange/index.html"),
+        detalleCripto: resolve(
+          __dirname,
+          "src/pages/detalle-cripto/index.html",
+        ),
       },
     },
   },

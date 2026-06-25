@@ -1,0 +1,103 @@
+.seccion-detalle {
+  padding: 4rem 5%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cripto-detalle {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+.cripto-detalle-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.2rem;
+}
+
+.cripto-detalle-img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.cripto-detalle-nombre {
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.rank-badge {
+  font-size: 0.85rem;
+  color: var(--bg-primary);
+  background: var(--accent);
+  padding: 0.15rem 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.cripto-detalle-simbolo {
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0.2rem 0 0;
+}
+
+.cripto-detalle-datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1.2rem;
+}
+
+.cripto-detalle-card {
+  background: var(--bg-primary);
+  padding: 0.9rem 1rem;
+}
+
+.cripto-detalle-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.3rem;
+}
+
+.cripto-detalle-datos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 1.2rem;
+}
+
+.variacion-positiva {
+  color: var(--success);
+}
+
+.variacion-negativa {
+  color: var(--danger);
+}
+
+.cripto-detalle-descripcion {
+  border-top: 1px solid var(--border);
+  padding-top: 1.2rem;
+}
+
+.cripto-detalle-descripcion p:not(.cripto-detalle-label) {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .cripto-detalle-datos {
+    grid-template-columns: 1fr;
+  }
+}

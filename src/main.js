@@ -11,20 +11,35 @@ const $buscadorResultado = getElemById("buscador-resultado");
 const $tendenciasGrid = getElemById("tendencias-grid");
 const $filtroVariacion = getElemById("filtro-variacion");
 const $ordenPrecio = getElemById("orden-precio");
+const $btnCargarMas = getElemById("btn-cargar-mas");
+
+let page = 1;
 
 let datosMercado = [];
 
 //  MERCADO
 async function cargarMercado() {
+  $btnCargarMas.disabled = true;// lo desabilito un toque porque puede pasar que deje de funcionar
   try {
-    const data = await obtenerMercado();
-    datosMercado = data;
+    const data = await obtenerMercado(page);
+
+    if (page === 1) {
+      datosMercado = data;// muestra los primeros
+    } else {
+      datosMercado = [...datosMercado, ...data];// sino es porque quiere cargar mas , por ende empiezo a sacar copias 
+    }
+
+    page++;//aumento
     aplicarFiltro();
   } catch (error) {
     errores($mercadoGrid, " en la carga de criptos");
     console.error(error);
+  }finally{
+        $btnCargarMas.disabled = false; // lo libero asi se permite seguir enviando peticiones
   }
 }
+
+$btnCargarMas.addEventListener("click", cargarMercado);
 
 function filtrarPorVariacion(criptos, criterio) {
   if (criterio === "subiendo") {
@@ -55,7 +70,14 @@ function aplicarFiltro() {
 const renderizarAccionesRelevantes = (criptos) => {
   let html = "";
   criptos.forEach(
-    ({ image, name, symbol, current_price, price_change_percentage_24h }) => {
+    ({
+      id,
+      image,
+      name,
+      symbol,
+      current_price,
+      price_change_percentage_24h,
+    }) => {
       const esPositiva = price_change_percentage_24h > 0;
       const claseVariacion = esPositiva
         ? "variacion-positiva"
@@ -63,7 +85,7 @@ const renderizarAccionesRelevantes = (criptos) => {
       const signo = esPositiva ? "+" : "";
 
       html += `
-      <div class="cripto-card">
+      <div class="cripto-card" data-id="${id}">
           <div class="cripto-card-header">
               <img class="cripto-img" src="${image}" alt="${name}">
               <div>
@@ -82,7 +104,18 @@ const renderizarAccionesRelevantes = (criptos) => {
     },
   );
   $mercadoGrid.innerHTML = html;
+  agregarClicksATarjetas();
 };
+
+function agregarClicksATarjetas() {
+  const tarjetas = document.querySelectorAll(".cripto-card");
+  tarjetas.forEach((tarjeta) => {
+    tarjeta.addEventListener("click", () => {
+      const id = tarjeta.dataset.id;
+      window.location.href = `/src/pages/detalle-cripto/index.html?id=${id}`;
+    });
+  });
+}
 
 async function buscarCripto(nombre) {
   try {
@@ -161,6 +194,7 @@ const renderizarTendencias = (tendencias) => {
   tendencias.forEach(
     ({
       item: {
+        id,
         small,
         name,
         symbol,
@@ -175,7 +209,7 @@ const renderizarTendencias = (tendencias) => {
       const signo = esPositiva ? "+" : "";
 
       html += `
-        <div class="cripto-card">
+        <div class="cripto-card" data-id="${id}">
             <div class="cripto-card-header">
                 <img class="cripto-img" src="${small}" alt="${name}">
                 <div>
@@ -194,6 +228,7 @@ const renderizarTendencias = (tendencias) => {
     },
   );
   $tendenciasGrid.innerHTML = html;
+  agregarClicksATarjetas();
 };
 
 cargarTendencias();
@@ -210,4 +245,4 @@ function ordenarPorPrecio(criptos, direccion) {
 
 cargarMercado();
 $filtroVariacion.addEventListener("change", aplicarFiltro);
-$ordenPrecio.addEventListener("change", aplicarFiltro); 
+$ordenPrecio.addEventListener("change", aplicarFiltro);

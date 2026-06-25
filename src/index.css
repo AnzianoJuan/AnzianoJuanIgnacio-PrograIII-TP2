@@ -519,3 +519,19 @@ header {
 .variacion-negativa {
   color: #ef4444; /* rojo */
 }
+
+.btn-cargar-mas {
+  display: block;
+  margin: 2rem auto 0;
+  padding: 0.7rem 2rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font);
+}
+
+.btn-cargar-mas:hover {
+  border-color: var(--border-hover);
+  color: var(--accent);
+}
