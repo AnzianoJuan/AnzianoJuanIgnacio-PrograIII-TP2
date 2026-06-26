@@ -11,11 +11,13 @@ const $statPrecio = getElemById("stat-precio");
 const $statVolumen = getElemById("stat-volumen");
 const $statMarketCap = getElemById("stat-marketcap");
 const $colorGrafico = getElemById("color-grafico");
+const $botonesTiempo = document.querySelectorAll(".btn-tiempo[data-dias]"); 
 
 let graficoActual = null;
-let ultimosPreciosGraficados = null; //  guardamos los precios para re-pintar sin re-buscar
+let ultimosPreciosGraficados = null;
+let criptoActual = "bitcoin"; //  guardamos cuál cripto está graficada ahora
+let diasActuales = 7; //  guardamos el rango actual
 
-// Leemos el color guardado, o usamos el naranja actual como default
 const colorGuardado = localStorage.getItem("colorGrafico") || "#cf6e00";
 $colorGrafico.value = colorGuardado;
 
@@ -31,10 +33,15 @@ function hexConOpacidad(hex, opacidad) {
   return `rgba(${r}, ${g}, ${b}, ${opacidad})`;
 }
 
-async function graficarCripto(cripto) {
+async function graficarCripto(cripto, dias = diasActuales) {
   try {
-    const { prices, total_volumes, market_caps } =
-      await graficarUltimaSemana(cripto);
+    criptoActual = cripto; 
+    diasActuales = dias; 
+
+    const { prices, total_volumes, market_caps } = await graficarUltimaSemana(
+      cripto,
+      dias,
+    );
     dibujarGrafico(prices);
     mostrarEstadisticas(cripto, prices, total_volumes, market_caps);
   } catch (error) {
@@ -55,7 +62,7 @@ function mostrarEstadisticas(cripto, precios, volumenes, marketCaps) {
 }
 
 function dibujarGrafico(precios) {
-  ultimosPreciosGraficados = precios; //  guardamos para poder re-pintar después
+  ultimosPreciosGraficados = precios;
 
   $contenedorGrafico.innerHTML = `<canvas id="grafico-precios"></canvas>`;
   const $canvas = getElemById("grafico-precios");
@@ -68,6 +75,7 @@ function dibujarGrafico(precios) {
     graficoActual.destroy();
   }
 
+  //esta es la config del grafico
   graficoActual = new Chart($canvas, {
     type: "line",
     data: {
@@ -119,7 +127,7 @@ function dibujarGrafico(precios) {
 $btnBuscar.addEventListener("click", () => {
   const nombre = $inputBusqueda.value.trim();
   if (nombre) {
-    graficarCripto(nombre);
+    graficarCripto(nombre, diasActuales);
   }
 });
 
@@ -129,6 +137,16 @@ $colorGrafico.addEventListener("change", () => {
   if (ultimosPreciosGraficados) {
     dibujarGrafico(ultimosPreciosGraficados);
   }
+});
+
+$botonesTiempo.forEach((boton) => {
+  boton.addEventListener("click", () => {
+    $botonesTiempo.forEach((b) => b.classList.remove("activo"));
+    boton.classList.add("activo");
+
+    const dias = boton.dataset.dias;
+    graficarCripto(criptoActual, dias);
+  });
 });
 
 graficarCripto("bitcoin");

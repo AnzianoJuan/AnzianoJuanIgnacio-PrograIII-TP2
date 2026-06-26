@@ -42,7 +42,7 @@
           <p>
             Visualizá la evolución del precio de las principales criptomonedas a
             través de un gráfico interactivo y detallado. Seleccioná el activo
-            que te interese y analizá su rendimiento durante los últimos 7 días,
+            que te interese y analizá su rendimiento durante los últimos días,
             identificando subas, bajas y el comportamiento general del mercado
             en ese período. Esta herramienta te permite tomar decisiones más
             informadas al momento de invertir o simplemente seguir de cerca tus
@@ -60,10 +60,14 @@
             />
             <button id="btn-buscar-cripto" class="btn-tiempo">Buscar</button>
           </div>
+          <div class="botones-tiempo">
+            <button class="btn-tiempo activo" data-dias="7">7D</button>
+            <button class="btn-tiempo" data-dias="30">30D</button>
+            <button class="btn-tiempo" data-dias="90">90D</button>
+          </div>
+
           <div class="selector-color">
-            <label for="color-grafico" class="color-label"
-              >Color</label
-            >
+            <label for="color-grafico" class="color-label">Color</label>
             <select id="color-grafico" class="select-filtro">
               <option value="#cf6e00">Naranja</option>
               <option value="#22c55e">Verde</option>

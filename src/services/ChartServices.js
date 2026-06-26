@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
-export async function graficarUltimaSemana(cripto) {
+export async function graficarUltimaSemana(cripto, dias = 7) {
   const resBusqueda = await fetch(`${API_URL}/search?query=${cripto}`, {
     headers: { "x-cg-demo-api-key": API_KEY },
   });
@@ -12,14 +12,16 @@ export async function graficarUltimaSemana(cripto) {
 
   const dataBusqueda = await resBusqueda.json();
   if (dataBusqueda.coins.length === 0) {
-    errores($contenedorGrafico, "No se encontró el activo.");
-    return;
+    throw new Error("No se encontró el activo");
   }
 
   const idCorrecto = dataBusqueda.coins[0].id;
-  // 2️ Ahora le pedimos el gráfico con el ID correcto
+
   const res = await fetch(
-    `${API_URL}/coins/${idCorrecto}/market_chart?vs_currency=usd&days=7`,
+    `${API_URL}/coins/${idCorrecto}/market_chart?vs_currency=usd&days=${dias}`,
+    {
+      headers: { "x-cg-demo-api-key": API_KEY },
+    },
   );
 
   if (!res.ok) {
