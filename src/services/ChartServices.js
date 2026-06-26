@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
+//grafica las criptos y los dias dependiendo lo elegido
 export async function graficarUltimaSemana(cripto, dias = 7) {
   const resBusqueda = await fetch(`${API_URL}/search?query=${cripto}`, {
     headers: { "x-cg-demo-api-key": API_KEY },

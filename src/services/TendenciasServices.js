@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
+// obtengo las tendencias 
 export async function obtenerTendencias() {
   const res = await fetch(`${API_URL}/search/trending`, {
     headers: { "x-cg-demo-api-key": API_KEY },

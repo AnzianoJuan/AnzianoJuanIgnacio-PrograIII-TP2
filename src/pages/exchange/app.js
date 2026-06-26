@@ -27,13 +27,14 @@ function claseConfianza(trustScore) {
   return "badge-baja";
 }
 
+//renderizo
 function renderizarExchanges(exchanges) {
   let html = "";
   exchanges.forEach(
     ({
       trust_score_rank,
       image,
-      name,
+      name,//destructuring
       country,
       trust_score,
       trade_volume_24h_btc,

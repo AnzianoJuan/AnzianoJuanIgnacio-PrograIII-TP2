@@ -30,7 +30,7 @@ async function cargarMercado() {
     }
 
     page++;//aumento
-    aplicarFiltro();
+    aplicarFiltro();// aplico el filtro 
   } catch (error) {
     errores($mercadoGrid, " en la carga de criptos");
     console.error(error);
@@ -44,27 +44,27 @@ $btnCargarMas.addEventListener("click", cargarMercado);
 function filtrarPorVariacion(criptos, criterio) {
   if (criterio === "subiendo") {
     return criptos.filter(
-      ({ price_change_percentage_24h }) => price_change_percentage_24h > 0,
+      ({ price_change_percentage_24h }) => price_change_percentage_24h > 0,// retorna las criptos filtradas que suben 
     );
   }
   if (criterio === "bajando") {
     return criptos.filter(
-      ({ price_change_percentage_24h }) => price_change_percentage_24h < 0,
+      ({ price_change_percentage_24h }) => price_change_percentage_24h < 0,// viceversa
     );
   }
-  return criptos;
+  return criptos;// return default
 }
 
 function aplicarFiltro() {
-  let resultado = filtrarPorVariacion(datosMercado, $filtroVariacion.value);
-  resultado = ordenarPorPrecio(resultado, $ordenPrecio.value);
+  let resultado = filtrarPorVariacion(datosMercado, $filtroVariacion.value);// filta por subiendo o bajando
+  resultado = ordenarPorPrecio(resultado, $ordenPrecio.value);// ordena
 
   if (resultado.length === 0) {
-    errores($mercadoGrid, " no hay resultados con ese filtro");
+    errores($mercadoGrid, " no hay resultados con ese filtro");// si no encuentra nada , error en el grid
     return;
   }
 
-  renderizarAccionesRelevantes(resultado);
+  renderizarAccionesRelevantes(resultado); //llama a renderizar
 }
 
 const renderizarAccionesRelevantes = (criptos) => {
@@ -73,7 +73,7 @@ const renderizarAccionesRelevantes = (criptos) => {
     ({
       id,
       image,
-      name,
+      name,// destructuring
       symbol,
       current_price,
       price_change_percentage_24h,
@@ -82,7 +82,7 @@ const renderizarAccionesRelevantes = (criptos) => {
       const claseVariacion = esPositiva
         ? "variacion-positiva"
         : "variacion-negativa";
-      const signo = esPositiva ? "+" : "";
+      const signo = esPositiva ? "+" : "";// cambio la clase dependiendo la variacion
 
       html += `
       <div class="cripto-card" data-id="${id}">
@@ -107,24 +107,25 @@ const renderizarAccionesRelevantes = (criptos) => {
   agregarClicksATarjetas();
 };
 
+//clicks a las tarjetas , para ver detalles 
 function agregarClicksATarjetas() {
   const tarjetas = document.querySelectorAll(".cripto-card");
   tarjetas.forEach((tarjeta) => {
     tarjeta.addEventListener("click", () => {
       const id = tarjeta.dataset.id;
-      window.location.href = `/src/pages/detalle-cripto/index.html?id=${id}`;
+      window.location.href = `/src/pages/detalle-cripto/index.html?id=${id}`;//le paso el id para ver detalle
     });
   });
 }
 
 async function buscarCripto(nombre) {
   try {
-    const cripto = await buscarCriptoPorNombre(nombre);
+    const cripto = await buscarCriptoPorNombre(nombre);// llamo al fetch
     if (!cripto) {
       errores($buscadorResultado, ` no se encontró la cripto ${nombre}`);
       return;
     }
-    renderizarCripto(cripto);
+    renderizarCripto(cripto); ///renderizo
   } catch (err) {
     errores($buscadorResultado, ` no se encontró la cripto ${nombre}`);
     console.error(err);
@@ -134,7 +135,7 @@ async function buscarCripto(nombre) {
 function renderizarCripto({
   name,
   symbol,
-  image: { large },
+  image: { large },// destructuring
   market_data: {
     current_price: { usd },
     price_change_percentage_24h,
@@ -144,7 +145,7 @@ function renderizarCripto({
   const claseVariacion = esPositiva
     ? "variacion-positiva"
     : "variacion-negativa";
-  const signo = esPositiva ? "+" : "";
+  const signo = esPositiva ? "+" : ""; // cambio las clases dependiendo la variacion
 
   $buscadorResultado.innerHTML = `
         <div class="cripto-detalle">
@@ -171,6 +172,7 @@ function renderizarCripto({
     `;
 }
 
+// se lanza cuando hace click
 $buscadorBtn.addEventListener("click", () => {
   const nombre = $buscadorInput.value.trim();
   if (nombre === "") {
@@ -179,6 +181,7 @@ $buscadorBtn.addEventListener("click", () => {
   buscarCripto(nombre);
 });
 
+// renderiza las tendencias
 async function cargarTendencias() {
   try {
     const tendencias = await obtenerTendencias();
@@ -196,7 +199,7 @@ const renderizarTendencias = (tendencias) => {
       item: {
         id,
         small,
-        name,
+        name,// destructuring
         symbol,
         data: { price, price_change_percentage_24h },
       },
@@ -206,7 +209,7 @@ const renderizarTendencias = (tendencias) => {
       const claseVariacion = esPositiva
         ? "variacion-positiva"
         : "variacion-negativa";
-      const signo = esPositiva ? "+" : "";
+      const signo = esPositiva ? "+" : ""; // clase de variacion 
 
       html += `
         <div class="cripto-card" data-id="${id}">
@@ -228,11 +231,12 @@ const renderizarTendencias = (tendencias) => {
     },
   );
   $tendenciasGrid.innerHTML = html;
-  agregarClicksATarjetas();
+  agregarClicksATarjetas();// agrega el detalle 
 };
 
 cargarTendencias();
 
+//ordena por precios
 function ordenarPorPrecio(criptos, direccion) {
   if (direccion === "desc") {
     return criptos.toSorted((a, b) => b.current_price - a.current_price);
@@ -243,6 +247,7 @@ function ordenarPorPrecio(criptos, direccion) {
   return criptos;
 }
 
+//cargo el mercado 
 cargarMercado();
 $filtroVariacion.addEventListener("change", aplicarFiltro);
 $ordenPrecio.addEventListener("change", aplicarFiltro);

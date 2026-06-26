@@ -4,6 +4,7 @@ import { obtenerDetalleCripto } from "@/services/DetalleCriptoServices.js";
 
 const $contenedor = getElemById("detalle-cripto-contenedor");
 
+// detalle de cripto como hicimos coon el profe
 const url = new URL(window.location.href);
 const id = url.searchParams.get("id");
 
@@ -14,7 +15,7 @@ function renderizarDetalle({
   description: { en: descripcion },
   market_data: {
     current_price: { usd },
-    market_cap_rank,
+    market_cap_rank,//destructuring
     market_cap: { usd: marketCap },
     total_volume: { usd: volumen24h },
     price_change_percentage_24h,

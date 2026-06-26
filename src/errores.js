@@ -6,4 +6,4 @@ export const errores = (contenedor, contexto) => {
   setTimeout(() => {
     contenedor.innerHTML = "";
   }, 5000);
-};
+};// modularizacion para los errores

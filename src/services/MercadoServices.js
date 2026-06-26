@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
+//obtengo el mercado y paginacion
 export async function obtenerMercado(page = 1) {
   const res = await fetch(
     `${API_URL}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=${page}`,
