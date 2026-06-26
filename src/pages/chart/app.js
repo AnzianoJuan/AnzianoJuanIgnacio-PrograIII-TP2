@@ -10,21 +10,31 @@ const $statNombre = getElemById("stat-nombre");
 const $statPrecio = getElemById("stat-precio");
 const $statVolumen = getElemById("stat-volumen");
 const $statMarketCap = getElemById("stat-marketcap");
-const API_URL = import.meta.env.VITE_API_URL;
+const $colorGrafico = getElemById("color-grafico");
 
 let graficoActual = null;
+let ultimosPreciosGraficados = null; //  guardamos los precios para re-pintar sin re-buscar
+
+// Leemos el color guardado, o usamos el naranja actual como default
+const colorGuardado = localStorage.getItem("colorGrafico") || "#cf6e00";
+$colorGrafico.value = colorGuardado;
 
 function formatearFecha(timestamp) {
   const fecha = new Date(timestamp);
-  return fecha.toLocaleDateString("es-AR", {
-    day: "2-digit",
-    month: "short",
-  });
+  return fecha.toLocaleDateString("es-AR", { day: "2-digit", month: "short" });
+}
+
+function hexConOpacidad(hex, opacidad) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${opacidad})`;
 }
 
 async function graficarCripto(cripto) {
   try {
-    const { prices, total_volumes, market_caps } = await graficarUltimaSemana(cripto);
+    const { prices, total_volumes, market_caps } =
+      await graficarUltimaSemana(cripto);
     dibujarGrafico(prices);
     mostrarEstadisticas(cripto, prices, total_volumes, market_caps);
   } catch (error) {
@@ -45,15 +55,15 @@ function mostrarEstadisticas(cripto, precios, volumenes, marketCaps) {
 }
 
 function dibujarGrafico(precios) {
-  // Recreamos el canvas en cada render (por si antes había un mensaje de error ahí)
+  ultimosPreciosGraficados = precios; //  guardamos para poder re-pintar después
+
   $contenedorGrafico.innerHTML = `<canvas id="grafico-precios"></canvas>`;
   const $canvas = getElemById("grafico-precios");
 
-  const etiquetas = precios.map((p) => formatearFecha(p[0])); // fechas
-  const valores = precios.map((p) => p[1]); // precios
+  const etiquetas = precios.map((p) => formatearFecha(p[0]));
+  const valores = precios.map((p) => p[1]);
+  const colorActual = $colorGrafico.value;
 
-  // Si ya había un gráfico previo, lo destruimos para liberar memoria
-  // (si no, queda "escuchando" eventos de un canvas que ya no existe)
   if (graficoActual) {
     graficoActual.destroy();
   }
@@ -66,12 +76,12 @@ function dibujarGrafico(precios) {
         {
           label: "Precio (USD)",
           data: valores,
-          borderColor: "#cf6e00",
-          backgroundColor: "rgba(207, 110, 0, 0.15)",
+          borderColor: colorActual,
+          backgroundColor: hexConOpacidad(colorActual, 0.15),
           fill: true,
-          tension: 0.3, // curva suave en vez de líneas rectas
-          pointRadius: 0, // oculta los puntos por defecto
-          pointHoverRadius: 5, // aparecen al pasar el mouse
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 5,
           borderWidth: 2,
         },
       ],
@@ -89,7 +99,7 @@ function dibujarGrafico(precios) {
           grid: { color: "rgba(255,255,255,0.05)" },
           ticks: {
             color: "#9a9a9a",
-            callback: (valor) => `$${valor.toLocaleString()}`,
+            callback: (v) => `$${v.toLocaleString()}`,
           },
         },
       },
@@ -97,9 +107,8 @@ function dibujarGrafico(precios) {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            // esto es lo que ves al pasar el mouse: precio + fecha
-            title: (contexto) => contexto[0].label,
-            label: (contexto) => `$${contexto.parsed.y.toLocaleString()}`,
+            title: (ctx) => ctx[0].label,
+            label: (ctx) => `$${ctx.parsed.y.toLocaleString()}`,
           },
         },
       },
@@ -110,8 +119,16 @@ function dibujarGrafico(precios) {
 $btnBuscar.addEventListener("click", () => {
   const nombre = $inputBusqueda.value.trim();
   if (nombre) {
-    graficarCripto(nombre); //si es un truhty , entra
+    graficarCripto(nombre);
   }
 });
 
-graficarCripto("bitcoin"); // pongo aca un valor por default asi queda piola
+$colorGrafico.addEventListener("change", () => {
+  localStorage.setItem("colorGrafico", $colorGrafico.value);
+
+  if (ultimosPreciosGraficados) {
+    dibujarGrafico(ultimosPreciosGraficados);
+  }
+});
+
+graficarCripto("bitcoin");
